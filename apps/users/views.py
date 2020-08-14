@@ -1,5 +1,7 @@
 from django.shortcuts import render
 from django.contrib.auth import authenticate, login
+from django.contrib.auth.backends import ModelBackend
+from django.db.models import Q
 # Create your views here.
 
 
