@@ -41,6 +41,7 @@ INSTALLED_APPS = [
     'course',
     'organization',
     'operation',
+    'captcha',
     # 'xadmin',
     # 'crispy_forms'
 ]
@@ -129,7 +130,18 @@ USE_TZ = False
 STATIC_URL = '/static/'
 
 STATICFILES_DIRS = (
-    os.path.join(BASE_DIR, 'static'),
+    BASE_DIR / 'static',
 )
 
 AUTH_USER_MODEL = 'users.UserProfile'
+
+AUTHENTICATION_BACKENDS = (
+    'users.views.CustomBackend',
+)
+
+EMAIL_HOST = "smtp.qq.com"  # SMTP服务器主机
+EMAIL_PORT = 25  # 端口
+EMAIL_HOST_USER = "31856109@qq.com"  # 邮箱地址
+EMAIL_HOST_PASSWORD = "xxxxxxxxxxxxxxxx"  # 密码
+EMAIL_USE_TLS = True
+EMAIL_FROM = "31856109@qq.com"  # 邮箱地址
