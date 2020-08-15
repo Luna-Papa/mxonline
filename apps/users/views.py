@@ -1,11 +1,11 @@
-from django.shortcuts import render
-from django.contrib.auth import authenticate, login
+from django.shortcuts import render, HttpResponseRedirect, reverse
+from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.hashers import make_password
 from django.contrib.auth.backends import ModelBackend
 from django.db.models import Q
 from .models import UserProfile, EmailVerifyRecord
 from django.views.generic.base import View
-from .forms import LoginForm, RegisterForm
+from .forms import LoginForm, RegisterForm, ForgetPwdForm, ModifyPwdForm
 from utils.email_send import send_register_email
 
 
@@ -62,12 +62,16 @@ class LoginView(View):
             user = authenticate(username=user_name, password=pass_word)
             # 如果不是null说明验证成功
             if user is not None:
-                # 登录
-                login(request, user)
-                return render(request, 'index.html')
+                if user.is_active:
+                    # 只有注册激活才能登陆
+                    login(request, user)
+                    return render(request, 'index.html')
+                else:
+                    return render(request, 'login.html', {'msg': '用户名或密码错误', 'login_form': login_form})
             # 只有当用户名或密码不存在时，才返回错误信息到前端
             else:
                 return render(request, 'login.html', {'msg': '用户名或密码错误', 'login_form': login_form})
+        # form.is_valid（）已经判断不合法了，所以这里不需要再返回错误信息到前端了
         else:
             return render(request, 'login.html', {'login_form': login_form})
 
@@ -114,8 +118,67 @@ class ActiveUserView(View):
                 user = UserProfile.objects.get(email=email)
                 user.is_active = True
                 user.save()
+                # 激活成功跳转到登录页面
+                return render(request, "login.html", )
         # 验证码不对的时候跳转到激活失败页面
         else:
             return render(request, 'active_fail.html')
-        # 激活成功跳转到登录页面
-        return render(request, "login.html", )
+
+        return render(request, 'login.html')
+
+
+class ForgetPwdView(View):
+    """找回密码"""
+
+    def get(self, request):
+        forget_form = ForgetPwdForm()
+        return render(request, 'forgetpwd.html', {'forget_form': forget_form})
+
+    def post(self, request):
+        forget_form = ForgetPwdForm(request.POST)
+        if forget_form.is_valid():
+            email = request.POST.get('email', None)
+            send_register_email(email, 'forget')
+            return render(request, 'send_success.html')
+        else:
+            return render(request, 'forgetpwd.html', {'forget_form': forget_form})
+
+
+class ResetView(View):
+    def get(self, request, active_code):
+        all_records = EmailVerifyRecord.objects.filter(code=active_code)
+        if all_records:
+            for record in all_records:
+                email = record.email
+                return render(request, "password_reset.html", {"email": email})
+        else:
+            return render(request, "active_fail.html")
+        return render(request, "login.html")
+
+
+class ModifyPwdView(View):
+    def post(self, request):
+        modify_form = ModifyPwdForm(request.POST)
+        if modify_form.is_valid():
+            pwd1 = request.POST.get("password1", "")
+            pwd2 = request.POST.get("password2", "")
+            email = request.POST.get("email", "")
+            if pwd1 != pwd2:
+                return render(request, "password_reset.html", {"email": email, "msg": "密码不一致！"})
+            user = UserProfile.objects.get(email=email)
+            user.password = make_password(pwd2)
+            user.save()
+
+            return render(request, "login.html")
+        else:
+            email = request.POST.get("email", "")
+            return render(request, "password_reset.html", {"email": email, "modify_form": modify_form})
+
+
+class LogoutView(View):
+    """
+    用户登出
+    """
+    def get(self, request):
+        logout(request)
+        return HttpResponseRedirect(reverse("index"))

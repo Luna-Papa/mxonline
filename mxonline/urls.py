@@ -14,9 +14,12 @@ Including another URLconf
     2. Add a URL to urlpatterns:  path('blog/', include('blog.urls'))
 """
 from django.contrib import admin
-from django.urls import path, include
+from django.urls import path, include, re_path
 from django.views.generic import TemplateView
-from users.views import LoginView, RegisterView
+from users.views import LoginView, RegisterView, ActiveUserView, ForgetPwdView, ResetView, ModifyPwdView, LogoutView
+from course.views import OrgView
+from mxonline.settings import MEDIA_ROOT
+from django.views.static import serve
 
 urlpatterns = [
     path('admin/', admin.site.urls),
@@ -24,5 +27,13 @@ urlpatterns = [
     # path('login/', views.user_login, name='login'),  # 修改login路由
     path('login/', LoginView.as_view(), name='login'),
     path('register/', RegisterView.as_view(), name='register'),
+    re_path('active/(?P<active_code>.*)/', ActiveUserView.as_view(), name='user_active'),
+    path('forget/', ForgetPwdView.as_view(), name='forget_pwd'),
+    re_path('reset/(?P<active_code>.*)/', ResetView.as_view(), name='reset_pwd'),
+    path('modify_pwd/', ModifyPwdView.as_view(), name='modify_pwd'),
     path('captcha/', include('captcha.urls')),
+    path('logout/', LogoutView.as_view(), name='logout'),
+    path('org_list/', OrgView.as_view(), name='org_list'),
+    # 处理图片显示的url,使用Django自带serve,传入参数告诉它去哪个路径找，我们有配置好的路径MEDIA_ROOT
+    re_path(r'^media/(?P<path>.*)', serve, {"document_root": MEDIA_ROOT})
 ]

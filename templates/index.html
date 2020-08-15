@@ -23,12 +23,19 @@
                 {% if request.user.is_authenticated %}
                 <div class="personal">
                     <dl class="user fr">
-                        <dd>{{ request.user.username }}<img class="down fr" src="/static/images/top_down.png"/></dd>
-                        <dt><img width="20" height="20" src="/static/media/image/2016/12/default_big_14.png"/></dt>
+                        <dd>{{ request.user.username }}
+                            <img class="down fr" src="/static/images/top_down.png"/>
+                        </dd>
+                        <dt>
+                            <img width="20" height="20" src="/static/media/image/2016/12/default_big_14.png"/>
+                        </dt>
                     </dl>
                     <div class="userdetail">
                         <dl>
-                            <dt><img width="80" height="80" src="/static/media/image/2016/12/default_big_14.png"/></dt>
+                            <dt>
+                                <img width="80" height="80"
+                                     src="/static/media/image/2016/12/default_big_14.png"/>
+                            </dt>
                             <dd>
                                 <h2>django</h2>
                                 <p>bobby</p>
@@ -36,7 +43,7 @@
                         </dl>
                         <div class="btn">
                             <a class="personcenter fl" href="usercenter-info.html">进入个人中心</a>
-                            <a class="fr" href="/logout/">退出</a>
+                            <a class="fr" href="{% url 'logout' %}">退出</a>
                         </div>
                     </div>
                 </div>
@@ -45,8 +52,8 @@
 				<div class="wp">
 					<div class="fl"><p>服务电话：<b>33333333</b></p></div>
 					<!--登录后跳转-->
-                    <a style="color:white" class="fr registerbtn" href="/register/">注册</a>
-                    <a style="color:white" class="fr loginbtn" href="/login/">登录</a>
+                    <a style="color:white" class="fr registerbtn" href="{% url 'register' %}">注册</a>
+                    <a style="color:white" class="fr loginbtn" href="{% url 'login' %}">登录</a>
 				</div>
                 {% endif %}
 
@@ -66,7 +73,8 @@
                                 <li data-value="teacher">授课老师</li>
                             </ul>
                         </div>
-                        <input id="search_keywords" class="fl" type="text" value="" placeholder="请输入搜索内容"/>
+                        <input id="search_keywords" class="fl" type="text" value=""
+                               placeholder="请输入搜索内容"/>
                         <img class="search_btn fr" id="jsSearchBtn" src="/static/images/search_btn.png"/>
                     </div>
                 </div>
@@ -97,54 +105,47 @@
 </section>
 <!--crumbs start-->
 
-
-
     <div class="banner">
 			<div class="wp">
 				<div class="fl">
 					<div class="imgslide">
 						<ul class="imgs">
-                            
                             <li>
-                                    <a href="http://www.imooc.com">
-                                        <img width="1200" height="478" src="/static/media/banner/2016/11/57a801860001c34b12000460.jpg" />
-                                    </a>
-                                </li>
-                            
+                                <a href="http://www.imooc.com">
+                                    <img width="1200" height="478"
+                                         src="/static/media/banner/2016/11/57a801860001c34b12000460.jpg" />
+                                </a>
+                            </li>
                             <li>
-                                    <a href="http://www.projectsedu.com">
-                                        <img width="1200" height="478" src="/static/media/banner/2016/11/57aa86a0000145c512000460.jpg" />
-                                    </a>
-                                </li>
-                            
+                                <a href="http://www.projectsedu.com">
+                                    <img width="1200" height="478"
+                                         src="/static/media/banner/2016/11/57aa86a0000145c512000460.jpg" />
+                                </a>
+                            </li>
                             <li>
-                                    <a href="http://www.projectsedu.com">
-                                        <img width="1200" height="478" src="/static/media/banner/2016/11/57a801860001c34b12000460_z4Vb8zl.jpg" />
-                                    </a>
-                                </li>
-                            
+                                <a href="http://www.projectsedu.com">
+                                    <img width="1200" height="478"
+                                         src="/static/media/banner/2016/11/57a801860001c34b12000460_z4Vb8zl.jpg" />
+                                </a>
+                            </li>
                             <li>
-                                    <a href="http://www.projectsedu.com">
-                                        <img width="1200" height="478" src="/static/media/banner/2016/11/57aa86a0000145c512000460_nMwvoQD.jpg" />
-                                    </a>
-                                </li>
-                            
+                                <a href="http://www.projectsedu.com">
+                                    <img width="1200" height="478"
+                                         src="/static/media/banner/2016/11/57aa86a0000145c512000460_nMwvoQD.jpg" />
+                                </a>
+                            </li>
                             <li>
-                                    <a href="http://www.projectsedu.com">
-                                        <img width="1200" height="478" src="/static/media/banner/2016/11/57aa86a0000145c512000460_GXIBATC.jpg" />
-                                    </a>
-                                </li>
-                            
-
+                                <a href="http://www.projectsedu.com">
+                                    <img width="1200" height="478"
+                                         src="/static/media/banner/2016/11/57aa86a0000145c512000460_GXIBATC.jpg" />
+                                </a>
+                            </li>
 						</ul>
 					</div>
 					<div class="unslider-arrow prev"></div>
 					<div class="unslider-arrow next"></div>
 				</div>
-
 				</div>
-
-
 			</div>
 <!--banner end-->
 <!--feature start-->
@@ -186,13 +187,11 @@
 						<div class="module1_2 box">
 							<div class="imgslide2">
 								<ul class="imgs">
-                                    
                                     <li>
                                         <a href="course-detail.html">
                                             <img width="470" height="300" src="/static/media/courses/2016/12/python文件处理.jpg" />
                                         </a>
                                     </li>
-                                    
                                     <li>
                                         <a href="course-detail.html">
                                             <img width="470" height="300" src="/static/media/courses/2016/12/python面向对象.jpg" />
@@ -306,7 +305,6 @@
                                     <span class="star fr">0</span>
                                 </div>
                             </div>
-                            
 					</div>
 				</div>
 			</div>
@@ -576,8 +574,7 @@
 <script src="/static/js/unslider.js" type="text/javascript"></script>
 <script src="/static/js/plugins/jquery.scrollLoading.js"  type="text/javascript"></script>
 <script src="/static/js/deco-common.js"  type="text/javascript"></script>
-
-    <script type="text/javascript" src="/static/js/index.js"></script>
+<script type="text/javascript" src="/static/js/index.js"></script>
 
 </body>
 </html>
